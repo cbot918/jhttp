@@ -14,8 +14,8 @@ worker-run: worker-build
 worker-build:
 	javac -d bin -cp lib/kafka-clients-3.2.0.jar:lib/slf4j-api-1.7.32.jar:lib/slf4j-simple-1.7.32.jar src/worker/Worker.java
 
-download-lib:
-	curl https://drive.usercontent.google.com/u/0/uc?id=1X2Q54KA5FsspdDiebA5f4OaTnV8lzHf9&export=download
+lib:
+	tar -xvf lib.tar
 
 .PHONY: build run kafka-run kafka-build
 .SILENT: build run kafka-run kafka-build

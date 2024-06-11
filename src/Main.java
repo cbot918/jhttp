@@ -62,10 +62,6 @@ public class Main{
 
         //     query = "insert into users(name) values('yale')";
         //     stmt.execute(query);
-            
-            
-            
-
         // } catch(Exception e){
         //     e.printStackTrace();
         //     return;
