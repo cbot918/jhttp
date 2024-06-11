@@ -1,11 +1,21 @@
 package src;
 
+// sql
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import redis.clients.jedis.Jedis;
+
+// redis
+// import redis.clients.jedis.Jedis;
+
+// kafka
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.RecordMetadata;
+
+import java.util.Properties;
 
 public class Main{
     public static String url = "jdbc:postgresql://localhost:5432/java";
@@ -15,10 +25,34 @@ public class Main{
     public static String query = "";
     public static void main(String[] args){
 
-        Jedis jedis = new Jedis("localhost",6379);
-        jedis.set("jkey", "jvalue");
-        jedis.close();
+        Properties props = new Properties();
+        props.put("bootstrap.servers", "localhost:9092");
+        props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+        props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 
+        KafkaProducer<String, String> producer = new KafkaProducer<>(props);
+        String topic = "test-topic";
+        String key = "myKey2";
+        String value = "Hello, Kafka2!";
+        
+
+        try {
+            ProducerRecord<String, String> record = new ProducerRecord<>(topic, key, value);
+            RecordMetadata metadata = producer.send(record).get();
+            System.out.printf("Sent record(key=%s value=%s) meta(partition=%d, offset=%d)\n",
+                    record.key(), record.value(), metadata.partition(), metadata.offset());
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            producer.close();
+        } 
+
+        // redis
+        // Jedis jedis = new Jedis("localhost",6379);
+        // jedis.set("jkey", "jvalue");
+        // jedis.close();
+
+        // postgres
         // try(Connection conn = DriverManager.getConnection(url, user, password);
         //     Statement stmt = conn.createStatement()){
             

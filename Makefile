@@ -4,7 +4,18 @@ run: build
 build:
 	javac -d bin -cp lib/postgresql-42.7.3.jar -cp lib/jedis-5.1.3.jar  src/Main.java
 
+kafka-run: kafka-build
+	java -cp lib/kafka-clients-3.2.0.jar:lib/slf4j-api-1.7.32.jar:lib/slf4j-simple-1.7.32.jar:bin src.Main
+kafka-build:
+	javac -d bin -cp lib/kafka-clients-3.2.0.jar:lib/slf4j-api-1.7.32.jar:lib/slf4j-simple-1.7.32.jar src/Main.java
 
+worker-run: worker-build
+	java -cp lib/kafka-clients-3.2.0.jar:lib/slf4j-api-1.7.32.jar:lib/slf4j-simple-1.7.32.jar:bin src.worker.Worker
+worker-build:
+	javac -d bin -cp lib/kafka-clients-3.2.0.jar:lib/slf4j-api-1.7.32.jar:lib/slf4j-simple-1.7.32.jar src/worker/Worker.java
 
-.PHONY: build run
-.SILENT: build run
+download-lib:
+	curl https://drive.usercontent.google.com/u/0/uc?id=1X2Q54KA5FsspdDiebA5f4OaTnV8lzHf9&export=download
+
+.PHONY: build run kafka-run kafka-build
+.SILENT: build run kafka-run kafka-build
